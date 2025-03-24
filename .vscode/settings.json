@@ -3,5 +3,10 @@
     "PGDATA",
     "postgres",
     "raffley"
-  ]
+  ],
+  "files.exclude": {
+    "**/_build": true,
+    "**/data": true,
+    "**/.elixir_ls": true
+  }
 }

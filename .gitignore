@@ -28,6 +28,9 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 raffley-*.tar
 
+# Ignore elixir ls extension
+.elixir_ls
+
 # Ignore assets that are produced by build tools.
 /priv/static/assets/
 
