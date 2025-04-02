@@ -1,6 +1,8 @@
 defmodule RaffleyWeb.RaffleLive.Index do
   use RaffleyWeb, :live_view
 
+  import RaffleyWeb.CustomComponents
+
   alias Raffley.Raffles
 
   def mount(_params, _session, socket) do
@@ -29,16 +31,6 @@ defmodule RaffleyWeb.RaffleLive.Index do
         <div class="price">${@raffle.ticket_price} / ticket</div>
         <.badge status={@raffle.status} />
       </div>
-    </div>
-    """
-  end
-
-  attr :status, :atom, required: true, values: [:upcoming, :open, :closed]
-
-  def badge(assigns) do
-    ~H"""
-    <div class="rounded-md px-2 py-1 text-xs font-medium uppercase inline-block border text-lime-600 border-lime-600">
-      {@status}
     </div>
     """
   end
