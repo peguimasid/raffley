@@ -1,11 +1,9 @@
-defmodule Raffley.Raffle do
-  defstruct [:id, :prize, :ticket_price, :status, :image_path, :description]
-end
-
 defmodule Raffley.Raffles do
+  alias Raffley.Raffles.Raffle
+
   def list_raffles do
     [
-      %Raffley.Raffle{
+      %Raffle{
         id: 1,
         prize: "Autographed Jersey",
         ticket_price: 2,
@@ -13,7 +11,7 @@ defmodule Raffley.Raffles do
         image_path: "/images/jersey.jpg",
         description: "Step up, sports fans!"
       },
-      %Raffley.Raffle{
+      %Raffle{
         id: 2,
         prize: "Coffee With A Yeti",
         ticket_price: 3,
@@ -21,7 +19,7 @@ defmodule Raffley.Raffles do
         image_path: "/images/yeti-coffee.jpg",
         description: "A super-chill coffee date."
       },
-      %Raffley.Raffle{
+      %Raffle{
         id: 3,
         prize: "Vintage Comic Book",
         ticket_price: 1,
@@ -40,7 +38,7 @@ defmodule Raffley.Raffles do
     id |> String.to_integer() |> get_raffle()
   end
 
-  def featured_raffles(%Raffley.Raffle{id: id}) do
+  def featured_raffles(%Raffle{id: id}) do
     Enum.filter(list_raffles(), fn raffle -> raffle.id != id end)
   end
 end

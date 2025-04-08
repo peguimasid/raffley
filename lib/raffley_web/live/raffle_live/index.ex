@@ -1,6 +1,7 @@
 defmodule RaffleyWeb.RaffleLive.Index do
   use RaffleyWeb, :live_view
 
+  alias Raffley.Raffles.Raffle
   alias Raffley.Raffles
 
   def mount(_params, _session, socket) do
@@ -48,7 +49,7 @@ defmodule RaffleyWeb.RaffleLive.Index do
     """
   end
 
-  attr :raffle, Raffley.Raffle, required: true
+  attr :raffle, Raffle, required: true
 
   def raffle_card(assigns) do
     ~H"""
