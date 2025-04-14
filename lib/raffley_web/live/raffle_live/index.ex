@@ -37,12 +37,7 @@ defmodule RaffleyWeb.RaffleLive.Index do
     ~H"""
     <.form for={@form}>
       <.input field={@form[:q]} placeholder="Search..." autocomplete="off" class="leading-3" />
-      <.input
-        type="select"
-        field={@form[:status]}
-        prompt="Status"
-        options={[:upcoming, :open, :closed]}
-      />
+      <.input type="select" field={@form[:status]} prompt="Status" options={Raffles.status_options()} />
       <.input
         type="select"
         field={@form[:sort_by]}

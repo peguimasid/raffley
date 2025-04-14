@@ -16,6 +16,10 @@ defmodule Raffley.Raffles do
     |> Repo.all()
   end
 
+  def status_options do
+    Ecto.Enum.values(Raffle, :status)
+  end
+
   def get_raffle!(id) do
     Raffle
     |> Repo.get!(id)
