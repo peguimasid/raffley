@@ -28,25 +28,14 @@ defmodule Raffley.Raffles do
     where(query, [r], ilike(r.prize, ^"%#{q}%"))
   end
 
-  defp sort(query, "prize") do
-    order_by(query, :prize)
+  defp sort(query, sort_by) do
+    order_by(query, ^sort_option(sort_by))
   end
 
-  defp sort(query, "ticket_price") do
-    order_by(query, desc: :ticket_price)
-  end
-
-  defp sort(query, "ticket_price_asc") do
-    order_by(query, asc: :ticket_price)
-  end
-
-  defp sort(query, "ticket_price_desc") do
-    order_by(query, desc: :ticket_price)
-  end
-
-  defp sort(query, _) do
-    order_by(query, :id)
-  end
+  defp sort_option("prize"), do: :prize
+  defp sort_option("ticket_price_desc"), do: [desc: :ticket_price]
+  defp sort_option("ticket_price_asc"), do: [asc: :ticket_price]
+  defp sort_option(_), do: :id
 
   def status_options do
     Ecto.Enum.values(Raffle, :status)
