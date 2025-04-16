@@ -11,7 +11,7 @@ defmodule RaffleyWeb.RaffleLive.Index do
   def handle_params(params, _uri, socket) do
     socket =
       socket
-      |> stream(:raffles, Raffles.filter_raffles(params))
+      |> stream(:raffles, Raffles.filter_raffles(params), reset: true)
       |> assign(:form, to_form(params))
 
     {:noreply, socket}
@@ -55,7 +55,7 @@ defmodule RaffleyWeb.RaffleLive.Index do
           "Price: Low to High": "ticket_price_asc"
         ]}
       />
-      <.link navigate={~p"/raffles"}>
+      <.link patch={~p"/raffles"}>
         Reset
       </.link>
     </.form>
@@ -107,7 +107,7 @@ defmodule RaffleyWeb.RaffleLive.Index do
       |> Map.take(~w(q status sort_by))
       |> Map.reject(fn {_key, value} -> value == "" end)
 
-    socket = push_navigate(socket, to: ~p"/raffles?#{params}")
+    socket = push_patch(socket, to: ~p"/raffles?#{params}")
 
     {:noreply, socket}
   end
