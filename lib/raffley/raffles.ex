@@ -47,6 +47,8 @@ defmodule Raffley.Raffles do
   end
 
   def featured_raffles(%Raffle{id: id}) do
+    Process.sleep(:timer.seconds(2))
+
     Raffle
     |> where([r], r.id != ^id)
     |> order_by(desc: :ticket_price)
