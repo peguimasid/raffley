@@ -17,9 +17,10 @@ defmodule Raffley.Raffles.Raffle do
   @doc false
   def changeset(raffle, attrs) do
     raffle
-    |> cast(attrs, [:prize, :description, :ticket_price, :status, :image_path])
-    |> validate_required([:prize, :description, :ticket_price, :status, :image_path])
+    |> cast(attrs, [:prize, :description, :ticket_price, :status, :image_path, :charity_id])
+    |> validate_required([:prize, :description, :ticket_price, :status, :image_path, :charity_id])
     |> validate_length(:description, min: 10)
     |> validate_number(:ticket_price, greater_than_or_equal_to: 1)
+    |> assoc_constraint(:charity)
   end
 end

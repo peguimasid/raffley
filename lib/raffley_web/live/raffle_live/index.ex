@@ -90,6 +90,7 @@ defmodule RaffleyWeb.RaffleLive.Index do
     ~H"""
     <.link navigate={~p"/raffles/#{@raffle}"} id={@id}>
       <div class="card">
+        <div class="charity">{@raffle.charity.name}</div>
         <img src={@raffle.image_path} alt={@raffle.description} />
         <h2>{@raffle.prize}</h2>
         <div class="details">

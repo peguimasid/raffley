@@ -37,6 +37,26 @@ defmodule Raffley.Charities do
   """
   def get_charity!(id), do: Repo.get!(Charity, id)
 
+  def get_charity_with_raffles!(id) do
+    Repo.get!(Charity, id)
+    |> Repo.preload(:raffles)
+  end
+
+  @doc """
+  Returns a list of charity names and their IDs.
+  This is useful for populating a dropdown or select input in a form.
+  The returned list will be in the format:
+  [
+    {charity_name, charity_id},
+    ...
+  """
+  def charity_names_and_ids do
+    Charity
+    |> select([c], {c.name, c.id})
+    |> order_by([c], asc: c.name)
+    |> Repo.all()
+  end
+
   @doc """
   Creates a charity.
 
