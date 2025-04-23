@@ -1,10 +1,16 @@
 defmodule RaffleyWeb.RaffleLive.Index do
+  alias Raffley.Charities
   use RaffleyWeb, :live_view
 
   alias Raffley.Raffles.Raffle
   alias Raffley.Raffles
 
   def mount(_params, _session, socket) do
+    socket =
+      socket
+      |> assign(:status_options, Raffles.status_options())
+      |> assign(:charity_options, Charities.charity_names_and_slugs())
+
     {:ok, socket}
   end
 
@@ -29,7 +35,7 @@ defmodule RaffleyWeb.RaffleLive.Index do
           Any guesses?
         </:details>
       </.banner> --%>
-      <.filter_form form={@form} />
+      <.filter_form form={@form} status_options={@status_options} charity_options={@charity_options} />
       <div class="raffles" id="raffles" phx-update="stream">
         <div id="empty" class="no-results hidden only:block">
           No raffles found. Try changing your filters.
@@ -44,7 +50,8 @@ defmodule RaffleyWeb.RaffleLive.Index do
     ~H"""
     <.form for={@form} id="filter-form" phx-change="filter">
       <.input field={@form[:q]} placeholder="Search..." autocomplete="off" phx-debounce="500" />
-      <.input type="select" field={@form[:status]} prompt="Status" options={Raffles.status_options()} />
+      <.input type="select" field={@form[:status]} prompt="Status" options={@status_options} />
+      <.input type="select" field={@form[:charity]} prompt="Charity" options={@charity_options} />
       <.input
         type="select"
         field={@form[:sort_by]}
@@ -52,7 +59,8 @@ defmodule RaffleyWeb.RaffleLive.Index do
         options={[
           Prize: "prize",
           "Price: High to Low": "ticket_price_desc",
-          "Price: Low to High": "ticket_price_asc"
+          "Price: Low to High": "ticket_price_asc",
+          Charity: "charity"
         ]}
       />
       <.link patch={~p"/raffles"}>
@@ -105,7 +113,7 @@ defmodule RaffleyWeb.RaffleLive.Index do
   def handle_event("filter", params, socket) do
     params =
       params
-      |> Map.take(~w(q status sort_by))
+      |> Map.take(~w(q status sort_by charity))
       |> Map.reject(fn {_key, value} -> value == "" end)
 
     socket = push_patch(socket, to: ~p"/raffles?#{params}")

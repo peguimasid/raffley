@@ -58,6 +58,21 @@ defmodule Raffley.Charities do
   end
 
   @doc """
+  Returns a list of charity names and their slugs.
+  This is useful for populating a dropdown or select input in a form.
+  The returned list will be in the format:
+  [
+    {charity_name, charity_slug},
+    ...
+  """
+  def charity_names_and_slugs do
+    Charity
+    |> select([c], {c.name, c.slug})
+    |> order_by([c], asc: c.name)
+    |> Repo.all()
+  end
+
+  @doc """
   Creates a charity.
 
   ## Examples
