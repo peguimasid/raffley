@@ -51,6 +51,7 @@ defmodule RaffleyWeb.Router do
 
     get "/raffles", RafflesController, :index
     get "/raffles/:id", RafflesController, :show
+    post "/raffles", RafflesController, :create
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
