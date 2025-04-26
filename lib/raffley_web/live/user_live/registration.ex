@@ -33,6 +33,13 @@ defmodule RaffleyWeb.UserLive.Registration do
 
         <.input field={@form[:email]} type="email" label="Email" autocomplete="username" required />
         <.input
+          field={@form[:username]}
+          label="Username"
+          autocomplete="username"
+          phx-debounce="500"
+          required
+        />
+        <.input
           field={@form[:password]}
           type="password"
           label="Password"
