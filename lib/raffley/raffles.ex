@@ -71,8 +71,16 @@ defmodule Raffley.Raffles do
     |> Repo.preload(:charity)
   end
 
+  def list_tickets(%Raffle{} = raffle) do
+    raffle
+    |> Ecto.assoc(:tickets)
+    |> preload(:user)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+  end
+
   def featured_raffles(%Raffle{id: id}) do
-    Process.sleep(:timer.seconds(2))
+    Process.sleep(:timer.seconds(1))
 
     Raffle
     |> where([r], r.id != ^id)
