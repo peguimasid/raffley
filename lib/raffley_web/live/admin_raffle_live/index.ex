@@ -26,7 +26,8 @@ defmodule RaffleyWeb.AdminRaffleLive.Index do
         Show Joke
       </.button>
       <div id="joke" class="joke hidden">
-        What's a tree's favorite drink? <span class="opacity-[2%]">Root bear</span>
+        What's a tree's favorite drink, {@current_user.username}?
+        <span class="opacity-[2%]">Root bear</span>
       </div>
       <.header class="mt-6">
         {@page_title}
