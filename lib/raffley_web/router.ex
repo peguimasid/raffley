@@ -37,6 +37,10 @@ defmodule RaffleyWeb.Router do
     live "/estimator", EstimatorLive
     live "/raffles", RaffleLive.Index
     live "/raffles/:id", RaffleLive.Show
+  end
+
+  scope "/", RaffleyWeb do
+    pipe_through [:browser, :require_authenticated_user]
 
     live "/admin/raffles", AdminRaffleLive.Index
     live "/admin/raffles/new", AdminRaffleLive.Form, :new
@@ -46,32 +50,6 @@ defmodule RaffleyWeb.Router do
     live "/charities/new", CharityLive.Form, :new
     live "/charities/:id", CharityLive.Show, :show
     live "/charities/:id/edit", CharityLive.Form, :edit
-  end
-
-  # Other scopes may use custom stacks.
-  scope "/api", RaffleyWeb do
-    pipe_through :api
-
-    get "/raffles", RafflesController, :index
-    get "/raffles/:id", RafflesController, :show
-    post "/raffles", RafflesController, :create
-  end
-
-  # Enable LiveDashboard and Swoosh mailbox preview in development
-  if Application.compile_env(:raffley, :dev_routes) do
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
-    import Phoenix.LiveDashboard.Router
-
-    scope "/dev" do
-      pipe_through :browser
-
-      live_dashboard "/dashboard", metrics: RaffleyWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
-    end
   end
 
   ## Authentication routes
@@ -109,6 +87,32 @@ defmodule RaffleyWeb.Router do
       on_mount: [{RaffleyWeb.UserAuth, :mount_current_user}] do
       live "/users/confirm/:token", UserLive.Confirmation, :edit
       live "/users/confirm", UserLive.ConfirmationInstructions, :new
+    end
+  end
+
+  # Other scopes may use custom stacks.
+  scope "/api", RaffleyWeb do
+    pipe_through :api
+
+    get "/raffles", RafflesController, :index
+    get "/raffles/:id", RafflesController, :show
+    post "/raffles", RafflesController, :create
+  end
+
+  # Enable LiveDashboard and Swoosh mailbox preview in development
+  if Application.compile_env(:raffley, :dev_routes) do
+    # If you want to use the LiveDashboard in production, you should put
+    # it behind authentication and allow only admins to access it.
+    # If your application does not have an admins-only section yet,
+    # you can use Plug.BasicAuth to set up some basic authentication
+    # as long as you are also using SSL (which you should anyway).
+    import Phoenix.LiveDashboard.Router
+
+    scope "/dev" do
+      pipe_through :browser
+
+      live_dashboard "/dashboard", metrics: RaffleyWeb.Telemetry
+      forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
 end
