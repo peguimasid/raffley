@@ -3,7 +3,11 @@ defmodule RaffleyWeb.RaffleLive.Show do
 
   alias Raffley.Raffles
 
+  on_mount {RaffleyWeb.UserAuth, :mount_current_user}
+
   def mount(_params, _session, socket) do
+    socket = assign(socket, :form, to_form(%{}))
+
     {:ok, socket}
   end
 
@@ -44,7 +48,22 @@ defmodule RaffleyWeb.RaffleLive.Show do
         </section>
       </div>
       <div class="activity">
-        <div class="left"></div>
+        <div class="left">
+          <div :if={@raffle.status == :open}>
+            <%= if @current_user do %>
+              <.form for={@form} id="ticket-form">
+                <.input field={@form[:comment]} placeholder="Comment..." autofocus />
+                <.button>
+                  Get a ticket
+                </.button>
+              </.form>
+            <% else %>
+              <.link href={~p"/users/log-in"} class="button">
+                Log In to get a ticket
+              </.link>
+            <% end %>
+          </div>
+        </div>
         <div class="right">
           <.featured_raffles raffles={@featured_raffles} />
         </div>
