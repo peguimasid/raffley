@@ -36,15 +36,17 @@ defmodule Raffley.Admin do
   end
 
   def draw_winner(%Raffle{status: :closed} = raffle) do
-    raffle = Repo.preload(raffle, :tickets)
-
-    case raffle.tickets do
-      [] ->
+    raffle
+    |> Ecto.assoc(:tickets)
+    |> order_by(fragment("random()"))
+    |> limit(1)
+    |> Repo.one()
+    |> case do
+      nil ->
         {:error, "No tickets to draw!"}
 
-      tickets ->
-        winner = Enum.random(tickets)
-        {:ok, _raffle} = update_raffle(raffle, %{winning_ticket_id: winner.id})
+      winner ->
+        update_raffle(raffle, %{winning_ticket_id: winner.id})
     end
   end
 
