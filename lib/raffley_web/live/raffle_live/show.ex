@@ -8,10 +8,6 @@ defmodule RaffleyWeb.RaffleLive.Show do
 
   on_mount {RaffleyWeb.UserAuth, :mount_current_user}
 
-  def topic(id) do
-    "raffle_watchers:#{id}"
-  end
-
   def mount(_params, _session, socket) do
     changeset = Tickets.change_ticket(%Ticket{})
 
@@ -27,19 +23,12 @@ defmodule RaffleyWeb.RaffleLive.Show do
       Raffles.subscribe(id)
 
       if current_user do
-        {:ok, _} =
-          Presence.track(self(), topic(id), current_user.username, %{
-            online_at: System.system_time(:second)
-          })
+        Presence.track_user(id, current_user)
+        Presence.subscribe(id)
       end
     end
 
-    presences =
-      Presence.list(topic(id))
-      |> Enum.map(fn {username, %{metas: metas}} ->
-        %{id: username, metas: metas}
-      end)
-
+    presences = Presence.list_users(id)
     raffle = Raffles.get_raffle!(id)
     tickets = Raffles.list_tickets(raffle)
 
@@ -219,5 +208,17 @@ defmodule RaffleyWeb.RaffleLive.Show do
 
   def handle_info({:raffle_updated, raffle}, socket) do
     {:noreply, assign(socket, :raffle, raffle)}
+  end
+
+  def handle_info({:user_joined, presence}, socket) do
+    {:noreply, stream_insert(socket, :presences, presence)}
+  end
+
+  def handle_info({:user_left, presence}, socket) do
+    if presence.metas == [] do
+      {:noreply, stream_delete(socket, :presences, presence)}
+    else
+      {:noreply, stream_insert(socket, :presences, presence)}
+    end
   end
 end
