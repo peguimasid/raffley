@@ -76,7 +76,7 @@ defmodule Raffley.Raffles do
   def get_raffle!(id) do
     Raffle
     |> Repo.get!(id)
-    |> Repo.preload(:charity)
+    |> Repo.preload([:charity, :winning_ticket])
   end
 
   def list_tickets(%Raffle{} = raffle) do

@@ -70,27 +70,6 @@ defmodule RaffleyWeb.RaffleLive.Index do
     """
   end
 
-  slot :inner_block, required: true
-  slot :details
-
-  def banner(assigns) do
-    assigns =
-      assigns
-      |> assign(:emoji, ~w(🎉 🎊 ✨ 🌟 💫) |> Enum.random())
-      |> assign(:reaction, ~w(😮 😍 🤩 👀 🙌) |> Enum.random())
-
-    ~H"""
-    <div class="banner">
-      <h1>
-        {render_slot(@inner_block)}
-      </h1>
-      <div :for={details <- @details} class="details">
-        {render_slot(details, [@emoji, @reaction])}
-      </div>
-    </div>
-    """
-  end
-
   attr :raffle, Raffle, required: true
   attr :id, :string, required: true
 
