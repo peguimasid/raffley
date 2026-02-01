@@ -1,4 +1,5 @@
 {
+  "tailwindCSS.experimental.configFile": "./assets/tailwind.config.js",
   "cSpell.words": [
     "ilike",
     "PGDATA",
